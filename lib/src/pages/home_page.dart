@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app/src/providers/movies.dart';
 
 import 'package:movies_app/src/widgets/card_swiper_widget.dart';
 
@@ -26,6 +27,9 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _swiperCards() {
-    return CardSwiper(movies: [1,2,3,4,5]);
+    final moviesProvider = MoviesProvider();
+    moviesProvider.getMovies();
+
+    return CardSwiper(movies: [1, 2, 3, 4, 5]);
   }
 }
