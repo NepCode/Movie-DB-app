@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app/src/models/movie_model.dart';
 import 'package:movies_app/src/providers/movies_provider.dart';
 
 
@@ -13,7 +14,7 @@ class DataSearch extends SearchDelegate {
     'Batman',
     'Shazam!',
     'Ironman',
-    'Capitan America',
+    'Captain America',
     'Superman',
     'Ironman 2',
     'Ironman 3',
@@ -23,7 +24,7 @@ class DataSearch extends SearchDelegate {
 
   final recentMovies = [
     'Spiderman',
-    'Capitan America'
+    'Captain America'
   ];
 
   @override
@@ -56,17 +57,18 @@ class DataSearch extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     // TODO: implement buildResults
-    return Center(
+    return null;
+   /* return Center(
       child: Container(
         height: 100.0,
         width: 100.0,
         color: Colors.blueAccent,
         child: Text(optionSelected),
       ),
-    );
+    );*/
   }
 
-  @override
+/*  @override
   Widget buildSuggestions(BuildContext context) {
     // TODO: implement buildSuggestions
 
@@ -82,6 +84,57 @@ class DataSearch extends SearchDelegate {
         },
       );
     }, itemCount: suggestedMovies.length);
+  }*/
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+
+    if ( query.isEmpty ) {
+      return Container();
+    }
+
+    return FutureBuilder(
+      future: moviesProvider.searchMovie(query),
+      builder: (BuildContext context, AsyncSnapshot<List<Movie>> snapshot) {
+
+        if( snapshot.hasData ) {
+
+          final movies = snapshot.data;
+
+          return ListView(
+              children: movies.map( (movie) {
+                return ListTile(
+                  leading: FadeInImage(
+                    image: NetworkImage( movie.getPosterImg() ),
+                    placeholder: AssetImage('assets/no-image.jpg'),
+                    width: 50.0,
+                    fit: BoxFit.contain,
+                  ),
+                  title: Text( movie.title ),
+                  subtitle: Text( movie.originalTitle ),
+                  onTap: (){
+                    close( context, null);
+                    movie.uniqueId = '';
+                    Navigator.pushNamed(context, 'movie_details', arguments: movie);
+                  },
+                );
+              }).toList()
+          );
+
+        } else {
+          return Center(
+              child: CircularProgressIndicator()
+          );
+        }
+
+      },
+    );
+
+
   }
+
+
+
+
 
 }
