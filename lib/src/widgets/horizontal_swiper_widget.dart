@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/src/models/movie.dart';
+import 'package:movies_app/src/models/movie_model.dart';
 
 class HorizontalSwiper extends StatelessWidget {
 
@@ -66,17 +66,21 @@ class HorizontalSwiper extends StatelessWidget {
   }
 
   Widget _card(BuildContext context, Movie movie) {
-    return Container(
+
+    final popular_movies_cards = Container(
       margin: EdgeInsets.only(right: 15.0),
       child: Column(
         children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: FadeInImage(
-              placeholder: AssetImage('assets/no-image.jpg'),
-              image: NetworkImage(movie.getPosterImg()),
-              fit: BoxFit.cover,
-              height: 160.0,
+          Hero(
+            tag: movie.id,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: FadeInImage(
+                placeholder: AssetImage('assets/no-image.jpg'),
+                image: NetworkImage(movie.getPosterImg()),
+                fit: BoxFit.cover,
+                height: 160.0,
+              ),
             ),
           ),
           SizedBox(height: 5.0),
@@ -88,6 +92,16 @@ class HorizontalSwiper extends StatelessWidget {
         ],
       ),
     );
+
+    return GestureDetector(
+      child: popular_movies_cards,
+      onTap: (){
+
+        Navigator.pushNamed(context, 'movie_details', arguments: movie );
+
+      },
+    );
+
   }
 
 
