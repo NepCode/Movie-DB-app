@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:movies_app/main.dart';
 import 'package:movies_app/src/models/movie_model.dart';
 
 
@@ -19,16 +20,25 @@ class CardSwiper extends StatelessWidget {
       padding: EdgeInsets.only(top: 10.0),
       child: Swiper(
         itemBuilder: (BuildContext context, int index) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            /*child: Image.network(
-              "http://via.placeholder.com/350x150",
-              fit: BoxFit.fill,
-            ),*/
-            child: FadeInImage(
-                placeholder: AssetImage('assets/no-image.jpg'),
-                image: NetworkImage(movies[index].getPosterImg()),
-                fit: BoxFit.cover,
+          movies[index].uniqueId = UniqueKey().toString();
+          return Hero(
+            tag: movies[index].uniqueId,
+              child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              /*child: Image.network(
+                "http://via.placeholder.com/350x150",
+                fit: BoxFit.fill,
+              ),*/
+              child: GestureDetector(
+                child: FadeInImage(
+                    placeholder: AssetImage('assets/no-image.jpg'),
+                    image: NetworkImage(movies[index].getPosterImg()),
+                    fit: BoxFit.cover,
+                ),
+                onTap: (){
+                  Navigator.pushNamed(context, 'movie_details', arguments: movies[index] );
+                },
+              ),
             ),
           );
         },
@@ -40,5 +50,10 @@ class CardSwiper extends StatelessWidget {
         //control: new SwiperControl(),
       ),
     );
+
+
+
+
+
   }
 }
