@@ -48,9 +48,11 @@ class HomePage extends StatelessWidget {
             //snapshot.data?.forEach((movie) => print(movie.title));
             return CardSwiper(movies: snapshot.data);
           } else {
-            return Container(
-                height: 400.0,
-                child: Center(child: CircularProgressIndicator()));
+            return Expanded(
+              child: Container(
+                  height: 400.0,
+                  child: Center(child: CircularProgressIndicator())),
+            );
           }
         });
 
